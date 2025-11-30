@@ -2,7 +2,7 @@ import duckdb
 import pandas as pd # type: ignore
 import os 
 
-def connect_duckdb(db_path: str = "data/warehouse/weahter.duckdb") -> duckdb.DuckDBPyConnection:
+def connect_duckdb(db_path: str = "data/warehouse/weather.duckdb") -> duckdb.DuckDBPyConnection:
 
     os.makedirs(os.path.dirname(db_path), exist_ok=True)
     return duckdb.connect(db_path)
@@ -22,14 +22,28 @@ def create_weather_table(conn: duckdb.DuckDBPyConnection):
         """
     conn.execute(query)
 
-def load_weather_data(conn: duckdb.DuckDBPyConnection, df: pd.DataFrame):
+def upsert_weather_data(conn: duckdb.DuckDBPyConnection, df: pd.DataFrame):
 
     # CREATE TABLE
     create_weather_table(conn)
 
-    # INSERT DATA
+    # REGISTER the pandas dataframe  as DuckDB table
+    conn.register("df", df)
+
+    # REMOVING DUPLICATES DATA
+    conn.execute("""
+                INSERT INTO weather_hourly
+                SELECT *
+                FROM df
+                WHERE (timestamp, latitude, longitude) NOT IN (
+                    SELECT timestamp, latitude, longitude
+                    FROM weather_hourly
+        );
+                 """)
+    # INSERTING NEW DATA
     conn.execute("INSERT INTO weather_hourly SELECT * FROM df")
 
-    print("Data successfully loaded into DuckDB.")
+
+    print("Upsert completed. Data loaded")
 
 
