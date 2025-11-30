@@ -1,6 +1,6 @@
 import logging 
 import os 
-import datetime import datetime
+from datetime import datetime # type: ignore
 
 def get_logger(name: str ="weather_etl", log_dir: str="logs"): 
 
@@ -8,7 +8,7 @@ def get_logger(name: str ="weather_etl", log_dir: str="logs"):
     os.makedirs(log_dir, exist_ok=True)
 
     # Define logs folder path
-    log_file = os.path.join(log_dir, "f{datetime.utcnow().date()}.log")
+    log_file = os.path.join(log_dir, f"{datetime.now().date()}.log")
 
     #logging configuration
 

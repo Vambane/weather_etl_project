@@ -1,0 +1,52 @@
+2025-12-01 00:01:11,007 | INFO | Extract step completed. Raw file: data/raw/weather_raw_2025-11-30T22-01-11.json
+2025-12-01 00:01:11,008 | INFO | Extract step duration: 1.063 seconds
+2025-12-01 00:01:11,021 | INFO | Transform step completed. Records transformed: 168
+2025-12-01 00:01:11,021 | INFO | Transform step duration: 0.013 seconds
+2025-12-01 00:01:11,055 | INFO | Load step completed. Rows inserted: {len(df)}
+2025-12-01 00:01:11,055 | INFO | Load step duration: 0.034 seconds
+2025-12-01 00:01:11,055 | INFO | === WEATHER ETL PIPELINE COMPLETED in 1.110 seconds ===
+2025-12-01 00:01:53,775 | INFO | Extract step completed. Raw file: data/raw/weather_raw_2025-11-30T22-01-53.json
+2025-12-01 00:01:53,776 | INFO | Extract step duration: 0.869 seconds
+2025-12-01 00:01:53,776 | ERROR | PIPELINE FAILED
+2025-12-01 00:01:53,776 | ERROR | Error: Missing required field: relativehumidity_2mm
+2025-12-01 00:01:53,777 | ERROR | Traceback (most recent call last):
+  File "/Users/dumisanincubeni/Documents/Github/weather_etl/pipeline.py", line 34, in run_pipeline
+    df = transform_weather_data(
+        raw_json=raw_json,
+        latitude=latitude,
+        longitude=longitude
+    )
+  File "/Users/dumisanincubeni/Documents/Github/weather_etl/etl/transform.py", line 28, in transform_weather_data
+    raise ValueError(f"Missing required field: {field}")
+ValueError: Missing required field: relativehumidity_2mm
+
+2025-12-01 00:01:53,777 | INFO | === WEATHER ETL PIPELINE FAILED after 0.870 seconds ===
+2025-12-01 00:03:12,363 | INFO | Extract step completed. Raw file: data/raw/weather_raw_2025-11-30T22-03-12.json
+2025-12-01 00:03:12,364 | INFO | Extract step duration: 0.830 seconds
+2025-12-01 00:03:12,374 | INFO | Transform step completed. Records transformed: 168
+2025-12-01 00:03:12,374 | INFO | Transform step duration: 0.010 seconds
+2025-12-01 00:03:12,416 | INFO | Load step completed. Rows inserted: {len(df)}
+2025-12-01 00:03:12,416 | INFO | Load step duration: 0.042 seconds
+2025-12-01 00:03:12,416 | INFO | === WEATHER ETL PIPELINE COMPLETED in 0.882 seconds ===
+2025-12-01 00:20:34,829 | INFO | Extract step completed. Raw file: data/raw/weather_raw_2025-11-30T22-20-34.json
+2025-12-01 00:20:34,830 | INFO | Extract step duration: 0.843 seconds
+2025-12-01 00:20:34,846 | INFO | Transform step completed. Records transformed: 168
+2025-12-01 00:20:34,846 | INFO | Transform step duration: 0.016 seconds
+2025-12-01 00:20:34,882 | INFO | Load step completed. Rows inserted: {len(df)}
+2025-12-01 00:20:34,883 | INFO | Load step duration: 0.036 seconds
+2025-12-01 00:20:34,883 | INFO | === WEATHER ETL PIPELINE COMPLETED in 0.896 seconds ===
+2025-12-01 00:20:48,462 | INFO | Extract step completed. Raw file: data/raw/weather_raw_2025-11-30T22-20-48.json
+2025-12-01 00:20:48,462 | INFO | Extract step duration: 0.977 seconds
+2025-12-01 00:20:48,474 | INFO | Transform step completed. Records transformed: 168
+2025-12-01 00:20:48,474 | INFO | Transform step duration: 0.012 seconds
+2025-12-01 00:20:48,518 | INFO | Load step completed. Rows inserted: {len(df)}
+2025-12-01 00:20:48,518 | INFO | Load step duration: 0.044 seconds
+2025-12-01 00:20:48,518 | INFO | === WEATHER ETL PIPELINE COMPLETED in 1.033 seconds ===
+2025-12-01 00:30:28,403 | INFO | Extract step completed. Raw file: data/raw/weather_raw_2025-11-30T22-30-28.json
+2025-12-01 00:30:28,403 | INFO | Extract step duration: 0.843 seconds
+2025-12-01 00:30:31,239 | INFO | Processed data saved to: data/processed/weather_processed_2025-11-30.parquet
+2025-12-01 00:30:31,239 | INFO | Transform step completed. Records transformed: 168
+2025-12-01 00:30:31,239 | INFO | Transform step duration: 2.836 seconds
+2025-12-01 00:30:31,274 | INFO | Load step completed. Rows inserted: {len(df)}
+2025-12-01 00:30:31,274 | INFO | Load step duration: 0.035 seconds
+2025-12-01 00:30:31,275 | INFO | === WEATHER ETL PIPELINE COMPLETED in 3.715 seconds ===

@@ -1,0 +1,15 @@
+location:
+  name: Johannesburg
+  latitude: -26.2041
+  longitude: 28.0473
+
+paths:
+  raw_path: "data/raw"
+  processed_path: "data/processed"
+  duckdb_path: "data/warehouse/weather.duckdb"
+  log_path: "logs"
+
+settings: 
+  hours_to_fetch: 168
+  dqc_enabled: true
+  

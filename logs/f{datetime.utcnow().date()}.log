@@ -1,0 +1,12 @@
+2025-11-30 22:07:05,834 | INFO | Extract step completed. Raw file: data/raw/weather_raw_2025-11-30T20-07-05.json
+2025-11-30 22:07:05,848 | INFO | Transform step completed. Records transformed: 168
+2025-11-30 22:07:05,883 | INFO | Load step completed. Rows inserted: {len(df)}
+2025-11-30 22:07:05,883 | INFO | === WEATHER ETL PIPELINE COMPLETED ===
+2025-11-30 22:08:02,793 | INFO | Extract step completed. Raw file: data/raw/weather_raw_2025-11-30T20-08-02.json
+2025-11-30 22:08:02,806 | INFO | Transform step completed. Records transformed: 168
+2025-11-30 22:08:02,843 | INFO | Load step completed. Rows inserted: {len(df)}
+2025-11-30 22:08:02,843 | INFO | === WEATHER ETL PIPELINE COMPLETED ===
+2025-11-30 22:08:15,945 | INFO | Extract step completed. Raw file: data/raw/weather_raw_2025-11-30T20-08-15.json
+2025-11-30 22:08:15,952 | INFO | Transform step completed. Records transformed: 168
+2025-11-30 22:08:15,969 | INFO | Load step completed. Rows inserted: {len(df)}
+2025-11-30 22:08:15,969 | INFO | === WEATHER ETL PIPELINE COMPLETED ===

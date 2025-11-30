@@ -1,3 +1,4 @@
+import os
 import json 
 import pandas as pd  # type: ignore
 from datetime import datetime
@@ -70,3 +71,28 @@ def transform_weather_data(raw_json: dict, latitude: float, longitude: float) ->
     df["load_date"] = datetime.utcnow().date()
 
     return df
+
+def save_processed_parquet(df: pd.DataFrame, processed_path: str) -> str:
+    """_summary_
+
+    Args:
+        df (pd.DataFrame): _description_
+        processed_path (str): _description_
+
+    Returns:
+        str: _description_
+    """
+    # Ensure processed directory exists
+    os.makedirs(processed_path, exist_ok=True)
+
+    # Build filename like: weather_processed_2023-10-05T14-30-00.parquet
+    load_date = df["load_date"].iloc[0]
+
+    file_path = os.path.join(
+        processed_path,
+        f"weather_processed_{load_date}.parquet"
+    )
+
+    df.to_parquet(file_path, index=False)
+
+    return file_path
