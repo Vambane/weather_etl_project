@@ -1,0 +1,8 @@
+2025-12-03 21:35:55,562 | INFO | Extract step completed. Raw file: data/raw/weather_raw_2025-12-03T19-35-55.json
+2025-12-03 21:35:55,563 | INFO | Extract step duration: 1.856 seconds
+2025-12-03 21:35:55,697 | INFO | Processed data saved to: data/processed/weather_processed_2025-12-03.parquet
+2025-12-03 21:35:55,697 | INFO | Transform step completed. Records transformed: 168
+2025-12-03 21:35:55,697 | INFO | Transform step duration: 0.135 seconds
+2025-12-03 21:35:55,721 | INFO | Load step completed. Rows inserted: {len(df)}
+2025-12-03 21:35:55,721 | INFO | Load step duration: 0.024 seconds
+2025-12-03 21:35:55,721 | INFO | === WEATHER ETL PIPELINE COMPLETED in 2.015 seconds ===

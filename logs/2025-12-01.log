@@ -58,3 +58,11 @@ ValueError: Missing required field: relativehumidity_2mm
 2025-12-01 21:01:11,406 | INFO | Load step completed. Rows inserted: {len(df)}
 2025-12-01 21:01:11,406 | INFO | Load step duration: 0.029 seconds
 2025-12-01 21:01:11,406 | INFO | === WEATHER ETL PIPELINE COMPLETED in 1.073 seconds ===
+2025-12-01 21:41:57,518 | INFO | Extract step completed. Raw file: data/raw/weather_raw_2025-12-01T19-41-57.json
+2025-12-01 21:41:57,519 | INFO | Extract step duration: 0.875 seconds
+2025-12-01 21:41:57,606 | INFO | Processed data saved to: data/processed/weather_processed_2025-12-01.parquet
+2025-12-01 21:41:57,606 | INFO | Transform step completed. Records transformed: 168
+2025-12-01 21:41:57,606 | INFO | Transform step duration: 0.086 seconds
+2025-12-01 21:41:57,621 | INFO | Load step completed. Rows inserted: {len(df)}
+2025-12-01 21:41:57,621 | INFO | Load step duration: 0.015 seconds
+2025-12-01 21:41:57,621 | INFO | === WEATHER ETL PIPELINE COMPLETED in 0.976 seconds ===

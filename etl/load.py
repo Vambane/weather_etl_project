@@ -41,7 +41,7 @@ def upsert_weather_data(conn: duckdb.DuckDBPyConnection, df: pd.DataFrame):
         );
                  """)
     # INSERTING NEW DATA
-    conn.execute("INSERT INTO weather_hourly SELECT * FROM df")
+    # conn.execute("INSERT INTO weather_hourly SELECT * FROM df")
 
 
     print("Upsert completed. Data loaded")
