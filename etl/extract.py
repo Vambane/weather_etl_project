@@ -2,6 +2,7 @@ import os
 import json
 import requests # type: ignore
 from datetime import datetime
+from typing import Optional
 
 
 def build_weather_url(latitude: float, longitude: float):
@@ -23,13 +24,14 @@ def build_weather_url(latitude: float, longitude: float):
 
     return base_url + params 
 
-def extract_weather_data(latitude: float, longitude: float, raw_path: str) -> str:
+def extract_weather_data(latitude: float, longitude: float, raw_path: str, city: Optional[str] = None) -> str:
     """_summary_
 
     Args:
         latitude (float): _description_
         longitude (float): _description_
         raw_path (str): _description_
+        city (Optional[str]): City name for labeling the file
 
     Raises:
         Exception: _description_
@@ -53,7 +55,8 @@ def extract_weather_data(latitude: float, longitude: float, raw_path: str) -> st
 
     # Build filename like: weather_raw_2023-10-05T14-30-00.json
     timestamp = datetime.utcnow().strftime("%Y-%m-%dT%H-%M-%S")
-    filename = f"weather_raw_{timestamp}.json"
+    city_suffix = f"{city.replace(' ', '_').lower()}_" if city else ""
+    filename = f"weather_raw_{city_suffix}{timestamp}.json"
     file_path = os.path.join(raw_path, filename)
 
     # Save JSON data to file 

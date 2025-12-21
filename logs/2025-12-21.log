@@ -1,0 +1,34 @@
+2025-12-21 20:30:59,896 | INFO | --- Processing location: Johannesburg (-26.2041, 28.0473) ---
+2025-12-21 20:31:00,918 | INFO | Extract step completed. Raw file: data/raw/weather_raw_johannesburg_2025-12-21T18-31-00.json
+2025-12-21 20:31:00,919 | INFO | Extract step duration: 1.022 seconds
+2025-12-21 20:31:01,166 | INFO | Processed data saved to: data/processed/weather_processed_johannesburg_2025-12-21.parquet
+2025-12-21 20:31:01,166 | INFO | Transform step completed. Records transformed: 168
+2025-12-21 20:31:01,166 | INFO | Transform step duration: 0.247 seconds
+2025-12-21 20:31:01,174 | INFO | Load step completed for Johannesburg. Rows inserted: 168
+2025-12-21 20:31:01,174 | INFO | Load step duration: 0.008 seconds
+2025-12-21 20:31:01,174 | INFO | --- Processing location: Cape Town (-33.9249, 18.4241) ---
+2025-12-21 20:31:02,090 | INFO | Extract step completed. Raw file: data/raw/weather_raw_cape_town_2025-12-21T18-31-02.json
+2025-12-21 20:31:02,090 | INFO | Extract step duration: 0.916 seconds
+2025-12-21 20:31:02,102 | INFO | Processed data saved to: data/processed/weather_processed_cape_town_2025-12-21.parquet
+2025-12-21 20:31:02,102 | INFO | Transform step completed. Records transformed: 168
+2025-12-21 20:31:02,102 | INFO | Transform step duration: 0.012 seconds
+2025-12-21 20:31:02,112 | INFO | Load step completed for Cape Town. Rows inserted: 168
+2025-12-21 20:31:02,112 | INFO | Load step duration: 0.010 seconds
+2025-12-21 20:31:02,112 | INFO | === WEATHER ETL PIPELINE COMPLETED in 2.226 seconds ===
+2025-12-21 20:41:42,901 | INFO | --- Processing location: Johannesburg (-26.2041, 28.0473) ---
+2025-12-21 20:41:43,911 | INFO | Extract step completed. Raw file: data/raw/weather_raw_johannesburg_2025-12-21T18-41-43.json
+2025-12-21 20:41:43,911 | INFO | Extract step duration: 1.010 seconds
+2025-12-21 20:41:43,986 | INFO | Processed data saved to: data/processed/weather_processed_johannesburg_2025-12-21.parquet
+2025-12-21 20:41:43,986 | INFO | Transform step completed. Records transformed: 168
+2025-12-21 20:41:43,986 | INFO | Transform step duration: 0.075 seconds
+2025-12-21 20:41:43,993 | INFO | Load step completed for Johannesburg. Rows inserted: 168
+2025-12-21 20:41:43,993 | INFO | Load step duration: 0.007 seconds
+2025-12-21 20:41:43,993 | INFO | --- Processing location: Cape Town (-33.9249, 18.4241) ---
+2025-12-21 20:41:44,882 | INFO | Extract step completed. Raw file: data/raw/weather_raw_cape_town_2025-12-21T18-41-44.json
+2025-12-21 20:41:44,883 | INFO | Extract step duration: 0.889 seconds
+2025-12-21 20:41:44,895 | INFO | Processed data saved to: data/processed/weather_processed_cape_town_2025-12-21.parquet
+2025-12-21 20:41:44,895 | INFO | Transform step completed. Records transformed: 168
+2025-12-21 20:41:44,895 | INFO | Transform step duration: 0.013 seconds
+2025-12-21 20:41:44,903 | INFO | Load step completed for Cape Town. Rows inserted: 168
+2025-12-21 20:41:44,903 | INFO | Load step duration: 0.007 seconds
+2025-12-21 20:41:44,907 | INFO | === WEATHER ETL PIPELINE COMPLETED in 2.012 seconds ===

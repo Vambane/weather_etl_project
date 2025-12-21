@@ -1,7 +1,10 @@
-location:
-  name: Johannesburg
-  latitude: -26.2041
-  longitude: 28.0473
+locations:
+  - name: Johannesburg
+    latitude: -26.2041
+    longitude: 28.0473
+  - name: Cape Town
+    latitude: -33.9249
+    longitude: 18.4241
 
 paths:
   raw_path: "data/raw"

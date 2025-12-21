@@ -9,7 +9,7 @@ def load_raw_json(file_path: str) -> dict:
         return json.load(f)
 
 
-def transform_weather_data(raw_json: dict, latitude: float, longitude: float) -> pd.DataFrame:
+def transform_weather_data(raw_json: dict, latitude: float, longitude: float, city: str) -> pd.DataFrame:
 
     # ----------------------------
     # 1. Basic structure validation
@@ -93,6 +93,7 @@ def transform_weather_data(raw_json: dict, latitude: float, longitude: float) ->
     # ----------------------------
     # 5. Add metadata
     # ----------------------------
+    df["city"] = city
     df["latitude"] = latitude
     df["longitude"] = longitude
     df["load_date"] = datetime.utcnow().date()
@@ -100,14 +101,15 @@ def transform_weather_data(raw_json: dict, latitude: float, longitude: float) ->
     return df
 
 
-def save_processed_parquet(df: pd.DataFrame, processed_path: str) -> str:
+def save_processed_parquet(df: pd.DataFrame, processed_path: str, city: str) -> str:
     os.makedirs(processed_path, exist_ok=True)
 
     load_date = df["load_date"].iloc[0]
+    city_suffix = city.replace(" ", "_").lower()
 
     file_path = os.path.join(
         processed_path,
-        f"weather_processed_{load_date}.parquet"
+        f"weather_processed_{city_suffix}_{load_date}.parquet"
     )
 
     df.to_parquet(file_path, index=False)
