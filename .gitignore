@@ -1,0 +1,12 @@
+data/
+logs/
+__pycache__/
+*.duckdb
+*.duckdb.wal
+models/
+*.pyc
+.DS_Store
+*.egg-info/
+dist/
+build/
+.env
