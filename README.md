@@ -71,6 +71,14 @@ What happens:
 
 If DuckDB reports a lock, close other processes using `data/warehouse/weather.duckdb` and rerun.
 
+## Static GitHub Pages demo
+
+The repository includes a dependency-free static dashboard preview in `docs/index.html`.
+The `Deploy static demo` GitHub Actions workflow publishes it to GitHub Pages whenever
+`main` changes. In the repository settings, set **Pages → Build and deployment → Source**
+to **GitHub Actions**. The demo uses representative sample data; the live Streamlit
+dashboard still requires a Python runtime and the local DuckDB warehouse.
+
 ## Exploring the data
 1) Open the notebook: `notebooks/weather_analysis.ipynb`.  
 2) Run cells to:

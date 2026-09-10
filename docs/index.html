@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Weather Forecast Platform</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --card: #fff;
+      --ink: #172033;
+      --muted: #6c7890;
+      --blue: #2864d7;
+      --teal: #13a89e;
+      --line: #e6ebf3;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font: 15px/1.5 system-ui, -apple-system, sans-serif; color: var(--ink); background: var(--bg); }
+    .shell { max-width: 1120px; margin: auto; padding: 28px 20px 48px; }
+    header { display: flex; justify-content: space-between; gap: 20px; align-items: end; margin-bottom: 24px; }
+    h1, h2, p { margin: 0; } h1 { font-size: clamp(1.8rem, 4vw, 2.7rem); } h2 { font-size: 1.1rem; }
+    .subtitle, .muted { color: var(--muted); } .subtitle { margin-top: 5px; }
+    select { border: 1px solid var(--line); border-radius: 9px; padding: 10px 34px 10px 12px; background: var(--card); color: var(--ink); font: inherit; }
+    .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 18px; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px; box-shadow: 0 5px 18px #1f3b6810; }
+    .metric-label { color: var(--muted); font-size: .85rem; } .metric-value { font-size: 1.7rem; font-weight: 700; margin-top: 5px; }
+    .chart-card { margin-bottom: 18px; } .chart-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; }
+    svg { width: 100%; height: 280px; display: block; overflow: visible; }
+    .axis { stroke: var(--line); stroke-width: 1; } .temp { fill: none; stroke: var(--blue); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+    .forecast { fill: none; stroke: var(--teal); stroke-width: 3; stroke-dasharray: 7 6; stroke-linecap: round; }
+    .legend { display: flex; gap: 18px; color: var(--muted); font-size: .85rem; } .legend span::before { content: ""; display: inline-block; width: 20px; border-top: 3px solid var(--blue); margin: 0 6px 3px 0; } .legend .future::before { border-color: var(--teal); border-top-style: dashed; }
+    .table-wrap { overflow-x: auto; } table { width: 100%; border-collapse: collapse; } th, td { text-align: left; padding: 11px 8px; border-bottom: 1px solid var(--line); } th { color: var(--muted); font-size: .8rem; font-weight: 600; }
+    .status { color: var(--teal); font-weight: 600; } footer { color: var(--muted); text-align: center; margin-top: 25px; font-size: .85rem; }
+    @media (max-width: 700px) { header { align-items: start; flex-direction: column; } .grid { grid-template-columns: repeat(2, 1fr); } .card { padding: 14px; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div>
+        <h1>Weather Forecast Platform</h1>
+        <p class="subtitle">A static preview of the ETL and LSTM forecasting dashboard</p>
+      </div>
+      <label>Location <select id="city"></select></label>
+    </header>
+
+    <section class="grid" aria-label="Current conditions">
+      <article class="card"><div class="metric-label">Temperature</div><div class="metric-value" id="temperature"></div></article>
+      <article class="card"><div class="metric-label">Humidity</div><div class="metric-value" id="humidity"></div></article>
+      <article class="card"><div class="metric-label">Precipitation</div><div class="metric-value" id="precipitation"></div></article>
+      <article class="card"><div class="metric-label">Data status</div><div class="metric-value status">Healthy</div></article>
+    </section>
+
+    <section class="card chart-card">
+      <div class="chart-head"><div><h2>Temperature outlook</h2><p class="muted">24-hour sample forecast</p></div><div class="legend"><span>Observed</span><span class="future">Forecast</span></div></div>
+      <svg id="chart" viewBox="0 0 900 280" role="img" aria-label="Temperature chart"></svg>
+    </section>
+
+    <section class="card">
+      <div class="chart-head"><div><h2>City comparison</h2><p class="muted">Latest sample readings</p></div></div>
+      <div class="table-wrap"><table><thead><tr><th>City</th><th>Temperature</th><th>Humidity</th><th>Precipitation</th><th>Model</th></tr></thead><tbody id="comparison"></tbody></table></div>
+    </section>
+    <footer>Static demo data · Source architecture: Open-Meteo → DuckDB → LSTM → dashboard</footer>
+  </main>
+  <script>
+    const data = {
+      Johannesburg: { temperature: 24, humidity: 48, precipitation: 0.1, observed: [19, 19, 18, 18, 19, 21, 23, 25, 27, 28, 29, 28], forecast: [27, 26, 25, 23, 21, 20, 19, 19, 18, 18, 19, 21] },
+      "Cape Town": { temperature: 19, humidity: 67, precipitation: 0.8, observed: [16, 16, 16, 17, 17, 18, 19, 20, 21, 21, 20, 19], forecast: [18, 17, 17, 16, 15, 15, 14, 14, 15, 16, 17, 18] }
+    };
+    const city = document.querySelector("#city");
+    Object.keys(data).forEach(name => city.add(new Option(name, name)));
+    function line(points, colorClass, start, end, max, min) {
+      const x = i => start + i * ((end - start) / (points.length - 1)), y = value => 240 - ((value - min) / (max - min)) * 190;
+      return `<polyline class="${colorClass}" points="${points.map((v, i) => `${x(i)},${y(v)}`).join(" ")}" />`;
+    }
+    function render(name) {
+      const item = data[name], all = item.observed.concat(item.forecast), min = Math.min(...all) - 2, max = Math.max(...all) + 2;
+      document.querySelector("#temperature").textContent = `${item.temperature}°C`;
+      document.querySelector("#humidity").textContent = `${item.humidity}%`;
+      document.querySelector("#precipitation").textContent = `${item.precipitation} mm`;
+      document.querySelector("#chart").innerHTML = `<line class="axis" x1="40" y1="240" x2="860" y2="240"/><line class="axis" x1="40" y1="50" x2="40" y2="240"/>${line(item.observed, "temp", 40, 450, max, min)}${line(item.forecast, "forecast", 450, 860, max, min)}<text x="40" y="265" class="muted">Now</text><text x="820" y="265" class="muted">24h</text>`;
+      document.querySelector("#comparison").innerHTML = Object.entries(data).map(([cityName, value]) => `<tr><td>${cityName}</td><td>${value.temperature}°C</td><td>${value.humidity}%</td><td>${value.precipitation} mm</td><td class="status">Ready</td></tr>`).join("");
+    }
+    city.addEventListener("change", () => render(city.value)); render(city.value);
+  </script>
+</body>
+</html>
