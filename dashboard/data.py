@@ -51,7 +51,7 @@ def fetch_forecast(_conn, city: str, horizon: int) -> pd.DataFrame:
 def fetch_model_metrics(_conn) -> pd.DataFrame:
     try:
         return _conn.execute("SELECT * FROM model_metrics ORDER BY city, horizon").fetchdf()
-    except Exception:
+    except duckdb.CatalogException:
         return pd.DataFrame()
 
 

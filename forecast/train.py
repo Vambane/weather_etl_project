@@ -1,5 +1,7 @@
 import os
+import copy
 import joblib
+import pandas as pd
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
@@ -30,6 +32,7 @@ def train_model(
     Returns the directory path where model artifacts are saved.
     """
     logger.info(f"Training {horizon}h model for {city} (lookback={lookback})")
+    torch.manual_seed(42)
 
     # Fetch all available data
     df = conn.execute(
@@ -47,6 +50,9 @@ def train_model(
             f"Not enough data for {city}: {len(df)} rows, "
             f"need at least {lookback + horizon + 100}"
         )
+    timestamps = pd.to_datetime(df["timestamp"], utc=True)
+    if timestamps.diff().dropna().gt(pd.Timedelta(hours=1)).any():
+        raise ValueError(f"Weather data for {city} contains gaps larger than one hour")
 
     logger.info(f"  Data rows: {len(df)}")
 
@@ -107,7 +113,7 @@ def train_model(
         if val_loss < best_val_loss:
             best_val_loss = val_loss
             epochs_no_improve = 0
-            best_state = model.state_dict().copy()
+            best_state = copy.deepcopy(model.state_dict())
         else:
             epochs_no_improve += 1
             if epochs_no_improve >= patience:
