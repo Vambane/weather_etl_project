@@ -23,7 +23,8 @@ Table `weather_hourly` in DuckDB:
 - `longitude` (DOUBLE)
 - `load_date` (DATE)
 
-Primary uniqueness is enforced during load on `(timestamp, latitude, longitude, city)`.
+Rows are upserted during load on `(timestamp, latitude, longitude, city)`, so corrected
+weather values replace earlier values for the same key.
 
 ## Configuration
 `config.yaml` drives the run:
@@ -45,7 +46,8 @@ settings:
   hours_to_fetch: 168
   dqc_enabled: true
 ```
-Add or remove cities by editing the `locations` list. Paths are workspace-relative.
+Add or remove cities by editing the `locations` list. Relative paths are resolved from
+the directory containing the configuration file.
 
 ## Setup
 1) Python 3.10+ recommended.  
@@ -64,7 +66,7 @@ What happens:
 - For each configured city, extract hourly forecast JSON to `data/raw`.
 - Transform with data quality checks (presence, ranges, freshness, hourly completeness).
 - Save processed Parquet per city to `data/processed/weather_processed_<city>_<date>.parquet`.
-- Upsert into DuckDB `weather_hourly`, deduping on timestamp/lat/lon/city.
+- Upsert into DuckDB `weather_hourly`, replacing rows with the same timestamp/lat/lon/city.
 - Backfill missing `city` values in older rows by matching lat/lon.
 
 If DuckDB reports a lock, close other processes using `data/warehouse/weather.duckdb` and rerun.
@@ -86,3 +88,5 @@ If DuckDB reports a lock, close other processes using `data/warehouse/weather.du
 - To add cities, update `config.yaml` and rerun the pipeline.
 - To clear data, remove or archive files under `data/` (ensure no other process holds the DuckDB lock).
 - Data quality checks can be extended in `etl/transform.py`; keep the expected record count in sync with `settings.hours_to_fetch`.
+- Historical backfills disable forecast freshness checks and accept variable chunk lengths.
+- Failed pipeline runs are logged and exit non-zero so schedulers can retry them.

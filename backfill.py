@@ -66,6 +66,7 @@ def backfill(start_date: str, end_date: str):
                     longitude=lon,
                     city=city,
                     dqc_enabled=True,
+                    expected_hours=None,
                     is_historical=True,
                 )
 
@@ -75,12 +76,14 @@ def backfill(start_date: str, end_date: str):
 
             except Exception as ex:
                 logger.error(f"  Failed chunk {s} to {e} for {city}: {ex}")
+                raise
 
             chunk_start = chunk_end + timedelta(days=1)
 
         logger.info(f"=== {city} backfill complete: {total_rows} total rows ===")
 
     logger.info("Backfill finished for all cities.")
+    conn.close()
 
 
 if __name__ == "__main__":

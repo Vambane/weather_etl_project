@@ -7,6 +7,7 @@ from etl.transform import save_processed_parquet
 
 import time
 import traceback
+from math import ceil
 
 logger = get_logger()
 
@@ -19,10 +20,15 @@ def run_pipeline():
 
     raw_path = config["paths"]["raw_path"]
     duckdb_path = config["paths"]["duckdb_path"]
+    settings = config.get("settings", {})
+    expected_hours = settings.get("hours_to_fetch", 168)
+    dqc_enabled = settings.get("dqc_enabled", True)
+    forecast_days = ceil(expected_hours / 24)
 
     print("=== WEATHER ETL PIPELINE STARTED ===")
     start_time = time.time()
 
+    conn = None
     try:
         conn = connect_duckdb(duckdb_path)
 
@@ -42,7 +48,8 @@ def run_pipeline():
                 latitude=latitude,
                 longitude=longitude,
                 raw_path=raw_path,
-                city=city
+                city=city,
+                forecast_days=forecast_days,
             )
 
             logger.info(f"Extract step completed. Raw file: {raw_file}")
@@ -57,7 +64,9 @@ def run_pipeline():
                 raw_json=raw_json,
                 latitude=latitude,
                 longitude=longitude,
-                city=city
+                city=city,
+                dqc_enabled=dqc_enabled,
+                expected_hours=expected_hours,
             )
 
             # Save processed parquet
@@ -86,7 +95,6 @@ def run_pipeline():
         logger.info(f"=== WEATHER ETL PIPELINE COMPLETED in {total_runtime:.3f} seconds ===")
         print(f"Loaded {total_rows} records into DuckDB.")
     except Exception as e:
-        # Lof the error and stack trace
         logger.error("PIPELINE FAILED")
         logger.error(f"Error: {str(e)}")
         logger.error(traceback.format_exc())
@@ -94,8 +102,11 @@ def run_pipeline():
         # Log failure runtime
         total_runtime = time.time() - start_time
         logger.info(f"=== WEATHER ETL PIPELINE FAILED after {total_runtime:.3f} seconds ===")
+        raise
 
     finally:
+        if conn is not None:
+            conn.close()
         print("=== WEATHER ETL PIPELINE ENDED (SUCCESS OR FAILURE)===")
 
 if __name__ == "__main__":

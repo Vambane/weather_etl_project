@@ -5,7 +5,9 @@ from typing import List, Dict
 
 def connect_duckdb(db_path: str = "data/warehouse/weather.duckdb") -> duckdb.DuckDBPyConnection:
 
-    os.makedirs(os.path.dirname(db_path), exist_ok=True)
+    parent = os.path.dirname(db_path)
+    if parent:
+        os.makedirs(parent, exist_ok=True)
     return duckdb.connect(db_path)
 
 def create_weather_table(conn: duckdb.DuckDBPyConnection):
@@ -35,18 +37,22 @@ def upsert_weather_data(conn: duckdb.DuckDBPyConnection, df: pd.DataFrame):
     # REGISTER the pandas dataframe  as DuckDB table
     conn.register("df", df)
 
-    # REMOVING DUPLICATES DATA
     conn.execute("""
-                INSERT INTO weather_hourly (timestamp, temperature_2m, relativehumidity_2m, precipitation, city, latitude, longitude, load_date)
-                SELECT timestamp, temperature_2m, relativehumidity_2m, precipitation, city, latitude, longitude, load_date
-                FROM df
-                WHERE (timestamp, latitude, longitude, city) NOT IN (
-                    SELECT timestamp, latitude, longitude, city
-                    FROM weather_hourly
-        );
-                 """)
-    # INSERTING NEW DATA
-    # conn.execute("INSERT INTO weather_hourly SELECT * FROM df")
+        DELETE FROM weather_hourly target
+        USING df source
+        WHERE target.timestamp = source.timestamp
+          AND target.latitude = source.latitude
+          AND target.longitude = source.longitude
+          AND target.city IS NOT DISTINCT FROM source.city
+    """)
+    conn.execute("""
+        INSERT INTO weather_hourly
+            (city, timestamp, temperature_2m, relativehumidity_2m, precipitation,
+             latitude, longitude, load_date)
+        SELECT city, timestamp, temperature_2m, relativehumidity_2m, precipitation,
+               latitude, longitude, load_date
+        FROM df
+    """)
 
 
     print("Upsert completed. Data loaded")
